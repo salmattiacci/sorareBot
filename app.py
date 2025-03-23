@@ -1,9 +1,15 @@
+import os
 import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+# Fetch the API key from the environment variable
+api_key = os.getenv('SORARE_API_KEY')
+
+if not api_key:
+    print("API key is missing. Set the SORARE_API_KEY environment variable.")
 
 # Function to get your players
 def get_my_players(api_key):
@@ -139,6 +145,6 @@ def scheduled_buy(api_key, budget):
 # Setting up the scheduler
 if __name__ == '__main__':
     scheduler = BlockingScheduler()
-    scheduler.add_job(scheduled_sell, 'interval', minutes=10, args=['your_api_key'])  # Every 10 minutes
-    scheduler.add_job(scheduled_buy, 'interval', hours=6, args=['your_api_key', 1000])  # Every 6 hours with 1000 budget
+    scheduler.add_job(scheduled_sell, 'interval', minutes=10, args=[api_key])  # Every 10 minutes
+    scheduler.add_job(scheduled_buy, 'interval', hours=6, args=[api_key, 1000])  # Every 6 hours with 1000 budget
     scheduler.start()
