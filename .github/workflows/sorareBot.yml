@@ -2,8 +2,8 @@ name: Sorare Bot
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # Runs every 6 hours
-  workflow_dispatch:  # Allows manual triggering
+    - cron: "0 */6 * * *"  # Runs every 6 hours (UTC)
+  workflow_dispatch:  # Allows you to manually trigger it
 
 jobs:
   run-bot:
@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -25,8 +25,6 @@ jobs:
 
     - name: Run the bot
       run: |
-        python app.py  # Run your bot script
-
-    - name: Clean up old dependencies and cache
-      run: |
-        rm -rf ~/.cache/pip  # Example: Clean up pip cache
+        python your_flask_app.py
+      env:
+        SORARE_API_KEY: ${{ secrets.SORARE_API_KEY }}  # Securely pass the API key to the Flask app
